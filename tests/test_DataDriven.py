@@ -1,31 +1,33 @@
 import pytest
+import requests
 import openpyxl
+from src.constants.api_constants import APIConstants
+from src.utils.utils import Utils
 
-def read_credentials_from_excel(file_path):
-    credentials = []
-    workbook = openpyxl.load_workbook(filename = file_path)
-    sheet = workbook.active
+#-------Without using pytest.mark.parameterize()----------
+# @pytest.mark.smoke
+# def test_create_auth_with_excel():
+#     file_path = APIConstants().file_path
+#     credentials = Utils().read_credentials_from_excel(file_path = file_path)
     
-    for rows in sheet.iter_rows(min_row=2, values_only=True):
-        username,password = rows
-        credentials.append(
-            {
-                "username" : username,
-                "password" : password
-            } 
+    # for user_cred in credentials:
+    #     username = user_cred["username"]
+    #     password = user_cred["password"]
+    #     response = create_auth_request(username=username, password=password)
+    #     print(response.text, response.status_code, sep="\n")
+    #     assert response.status_code == 200
+    
+# Test Method with an example of parameterize()
+@pytest.mark.parametrize(
+    "user_cred", 
+    Utils().read_credentials_from_excel(
+        file_path = APIConstants().file_path
         )
-    return credentials
-
-@pytest.mark.smoke
-def test_create_auth_with_excel():
-    file_path = r"C:\Users\ram.dafe\Python312\Selenium_With_Python\Python_Automatio_Framework\.venv\Sample_Excel_File.xlsx"
-    credentials = read_credentials_from_excel(file_path = file_path)
-    print("Type of credentials:", type(credentials))
-    print(credentials)
-    
-def create_auth_request(username, password):
-    payload = {
-        "username": username,
-        "password": password
-    }
-    return payload
+    )
+def test_create_auth_with_excel_2(user_cred):
+    username = user_cred["username"]
+    password = user_cred["password"]
+    print(username, password)
+    response = Utils().create_auth_request(username=username, password=password)
+    print("Response:", response.json())
+    assert response.status_code == 200

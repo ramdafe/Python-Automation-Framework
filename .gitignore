@@ -174,5 +174,16 @@ poetry.toml
 pyrightconfig.json
 
 .venv
-
+.dotenv.exe
+faker.exe
+jsonschema.exe
+normalizer.exe
+pip.exe
+pip3.12.exe
+pip3.exe
+py.test.exe
+pytest.exe
+wheel.exe
+allure_result
+data_driven_allure_result
 # End of https://www.toptal.com/developers/gitignore/api/python
